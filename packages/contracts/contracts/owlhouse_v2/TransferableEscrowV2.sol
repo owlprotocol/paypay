@@ -72,6 +72,10 @@ contract TransferableEscrowV2 is ERC721Holder {
         return totalInterestOwedAtTime(_time) + totalPrincipalOwedAtTime(_time);
     }
 
+    function totalPayableNow() public view returns (uint256) {
+        return (totalInterestOwedAtTime(block.timestamp) + totalPrincipal()) - _weiPaid;
+    }
+
     function totalOwedNow() public view returns (uint256) {
         return totalOwedAtTime(block.timestamp);
     }
@@ -161,7 +165,11 @@ contract TransferableEscrowV2 is ERC721Holder {
      ****************/
 
     function makePayment(uint256 amount) public {
-        require(amount <= totalInterestOwedAtTime(block.timestamp) + totalPrincipal(), 'Unable to overpay!');
+        // Check if a user is paying off completely
+        if (amount > totalPayableNow())
+            // Bump down to stop from overpaying
+            amount = totalPayableNow();
+
         SafeERC20.safeTransferFrom(IERC20(_paymentToken), getBorrower(), address(this), amount);
         // Increase paid
         _weiPaid += amount;

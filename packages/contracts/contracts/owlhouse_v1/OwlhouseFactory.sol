@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import './assets/OwlNFT.sol';
-import './assets/IOwlNFT.sol';
+import '../assets/OwlNFT.sol';
+import '../assets/IOwlNFT.sol';
 import './TransferableEscrow.sol';
 import './ITransferableEscrow.sol';
 

@@ -34,7 +34,7 @@ describe('TransferableEscrow V2 Test Suite', async () => {
             currentOwed: (await c.totalOwedNow()).toString(),
             owedAtEnd: (await c.totalOwedAtEnd()).toString(),
             hasDefaulted: await c.hasDefaulted(),
-            paymentsComplete: await c.paymentsComplete(),
+            paymentsComplete: await c.paymentsComplete(await blockTime()),
             lender: await c.getLender(),
             borrower: await c.getBorrower(),
             loanStart: loanStart.toString(),
@@ -52,7 +52,7 @@ describe('TransferableEscrow V2 Test Suite', async () => {
 
         assetToken = (await ERC721Factory.deploy('AssetToken', 'ASST', 'IPFS-HASH')) as OwlNFT;
         paymentToken = (await ERC20Factory.deploy()) as OwlToken;
-        OwlhouseFactory = (await OwlhouseFactoryFactory.deploy()) as OwlhouseFactory;
+        OwlhouseFactory = (await OwlhouseFactoryFactory.deploy()) as OwlhouseFactoryV2;
 
         // Signers
         [lender, borrower] = await ethers.getSigners();
@@ -73,6 +73,7 @@ describe('TransferableEscrow V2 Test Suite', async () => {
         const start = await blockTime();
         const end = start + 10;
         const loanAmount = 100;
+        const interestAmount = 50;
 
         const escrowTX = await OwlhouseFactory.deployEscrow(
             lender.address,
@@ -83,6 +84,7 @@ describe('TransferableEscrow V2 Test Suite', async () => {
             start,
             end,
             loanAmount,
+            interestAmount,
         );
 
         const receipt = await escrowTX.wait();
@@ -98,13 +100,13 @@ describe('TransferableEscrow V2 Test Suite', async () => {
 
         console.log(`Escrow: ${JSON.stringify(escrowAddress)}`);
 
-        const TransferableEscrow = await ethers.getContractAt('TransferableEscrow', escrowAddress);
+        const TransferableEscrowContract = await ethers.getContractAt('TransferableEscrowV2', escrowAddress);
 
         console.log(`Start timestamp: ${await blockTime()}`);
 
         // See loan amount
         for (const _ of [0, 0, 0, 0, 0]) {
-            console.log(`Amount owed: ${await TransferableEscrow.totalOwedNow()}`);
+            console.log(`Amount owed: ${await TransferableEscrowContract.totalOwedNow()}`);
             // Up timestamp 3 seconds
             nextBlockTime(3);
         }
@@ -121,6 +123,7 @@ describe('TransferableEscrow V2 Test Suite', async () => {
         const start = await blockTime();
         const end = start + 20;
         const loanAmount = 100;
+        const interestAmount = 50;
 
         await OwlhouseFactory.deployEscrow(
             lender.address,
@@ -131,6 +134,7 @@ describe('TransferableEscrow V2 Test Suite', async () => {
             start,
             end,
             loanAmount,
+            interestAmount,
         );
 
         // Get escrow address
@@ -140,27 +144,32 @@ describe('TransferableEscrow V2 Test Suite', async () => {
 
         // Grab contract obj
         const TransferableEscrowContract = (await ethers.getContractAt(
-            'TransferableEscrow',
+            'TransferableEscrowV2',
             escrowAddress,
-        )) as TransferableEscrow;
+        )) as TransferableEscrowV2;
 
         // Probably defaulted currently
+        console.log('Initial status: no payments');
         await logPaymentStatus(TransferableEscrowContract);
 
         // Make payment
-        await TransferableEscrowContract.connect(borrower).makePayment(20);
+        await TransferableEscrowContract.connect(borrower).makePayment(25);
+        console.log('Status after 1st payment (20 Hoots)');
         await logPaymentStatus(TransferableEscrowContract);
 
         // Bump time
         await nextBlockTime(10);
+        console.log('Status +10s');
         await logPaymentStatus(TransferableEscrowContract);
 
         // Make last payment
-        await TransferableEscrowContract.connect(borrower).makePayment(80);
+        await TransferableEscrowContract.connect(borrower).makePayment(200);
+        console.log('Status after 2nd payment (80 Hoots)');
         await logPaymentStatus(TransferableEscrowContract);
 
         // Bump timpe
         await nextBlockTime(200);
+        console.log('Status +200s');
         await logPaymentStatus(TransferableEscrowContract);
 
         console.log(`Finished @${await blockTime()}`);
