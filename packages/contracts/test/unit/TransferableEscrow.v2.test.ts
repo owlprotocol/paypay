@@ -1,15 +1,15 @@
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
-import { TransferableEscrow, OwlNFT, OwlToken, OwlhouseFactory } from '../../typechain';
+import { TransferableEscrowV2, OwlNFT, OwlToken, OwlhouseFactoryV2 } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
-describe('TransferableEscrow Test Suite', async () => {
+describe('TransferableEscrow V2 Test Suite', async () => {
     // let TransferableEscrowFactory: TransferableEscrow__factory;
 
     let borrowerToken: OwlNFT;
     let lenderToken: OwlNFT;
     let assetToken: OwlNFT;
-    let OwlhouseFactory: OwlhouseFactory;
+    let OwlhouseFactory: OwlhouseFactoryV2;
 
     let borrower: SignerWithAddress;
     let lender: SignerWithAddress;
@@ -27,8 +27,8 @@ describe('TransferableEscrow Test Suite', async () => {
         await ethers.provider.send('evm_mine'); // this one will have 02:00 PM as its timestamp
     };
 
-    const logPaymentStatus = async (c: TransferableEscrow) => {
-        const { loanStart, loanEnd, weiPaid, weiPerSecond } = await c.paymentStatus();
+    const logPaymentStatus = async (c: TransferableEscrowV2) => {
+        const { loanStart, loanEnd, weiPaid, weiPerSecondPrinciple, weiPerSecondInterest } = await c.paymentInfo();
         console.log({
             currentTimestamp: await blockTime(),
             currentOwed: (await c.totalOwedNow()).toString(),
@@ -40,14 +40,15 @@ describe('TransferableEscrow Test Suite', async () => {
             loanStart: loanStart.toString(),
             loanEnd: loanEnd.toString(),
             weiPaid: weiPaid.toString(),
-            weiPerSecond: weiPerSecond.toString(),
+            weiPerSecondPrinciple: weiPerSecondPrinciple.toString(),
+            weiPerSecondInterest: weiPerSecondInterest.toString(),
         });
     };
 
     before(async () => {
         const ERC721Factory = await ethers.getContractFactory('OwlNFT');
         const ERC20Factory = await ethers.getContractFactory('OwlToken');
-        const OwlhouseFactoryFactory = await ethers.getContractFactory('OwlhouseFactory');
+        const OwlhouseFactoryFactory = await ethers.getContractFactory('OwlhouseFactoryV2');
 
         assetToken = (await ERC721Factory.deploy('AssetToken', 'ASST', 'IPFS-HASH')) as OwlNFT;
         paymentToken = (await ERC20Factory.deploy()) as OwlToken;

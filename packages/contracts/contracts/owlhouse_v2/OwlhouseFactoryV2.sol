@@ -1,12 +1,14 @@
-import './OwlNFT.sol';
-import './IOwlNFT.sol';
-import './TransferableEscrow.sol';
-import './ITransferableEscrow.sol';
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
+
+import './assets/OwlNFT.sol';
+import './assets/IOwlNFT.sol';
+import './TransferableEscrowV2.sol';
 
 import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
-contract OwlhouseFactory {
+contract OwlhouseFactoryV2 {
     using Counters for Counters.Counter;
 
     Counters.Counter private _mintCounter;
@@ -20,7 +22,8 @@ contract OwlhouseFactory {
         address escrowAddress,
         uint256 loanStart,
         uint256 loanEnd,
-        uint256 weiNetWorth
+        uint256 weiNetWorth,
+        uint256 weiAssetWorthInterest
     );
 
     constructor() {
@@ -39,7 +42,8 @@ contract OwlhouseFactory {
         uint256 assetTokenId,
         uint256 loanStart,
         uint256 loanEnd,
-        uint256 weiAssetWorth
+        uint256 weiAssetWorth,
+        uint256 weiAssetWorthInterest
     ) public returns (address) {
         // Token Minting
         uint256 tokenId = _mintCounter.current();
@@ -49,7 +53,7 @@ contract OwlhouseFactory {
 
         // Setup Escrow Contract
         address escrow = address(
-            new TransferableEscrow(
+            new TransferableEscrowV2(
                 paymentToken,
                 assetNFT,
                 _borrowerNFT,
@@ -59,14 +63,23 @@ contract OwlhouseFactory {
                 tokenId, // lender token id
                 loanStart,
                 loanEnd,
-                weiAssetWorth
+                weiAssetWorth,
+                weiAssetWorthInterest
             )
         );
 
         // Transfer NFT
         IERC721(assetNFT).safeTransferFrom(lenderAddress, escrow, assetTokenId);
 
-        emit TransferEscrow(lenderAddress, paymentToken, escrow, loanStart, loanEnd, weiAssetWorth);
+        emit TransferEscrow(
+            lenderAddress,
+            paymentToken,
+            escrow,
+            loanStart,
+            loanEnd,
+            weiAssetWorth,
+            weiAssetWorthInterest
+        );
 
         // Increment Token Counter
         _mintCounter.increment();
