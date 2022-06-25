@@ -44,13 +44,6 @@ module.exports = {
         'react/prop-types': 0,
         'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
         'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
-        //https://dev.to/diballesteros/how-to-quickly-configure-eslint-for-import-sorting-2h73
-        'import/order': [
-            1,
-            {
-                groups: ['external', 'builtin', 'internal', 'sibling', 'parent', 'index'],
-            },
-        ],
     },
     settings: {
         react: {
