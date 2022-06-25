@@ -12,10 +12,10 @@
     "lint:fix": "eslint --ext .ts,.tsx src --fix"
   },
   "dependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "web3": "^1.7.3",
     "@babel/core": "^7.17.5",
+    "@chakra-ui/react": "1.8.8",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@mdx-js/react": "^2.0.0",
@@ -60,9 +60,12 @@
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-storybook": "^0.5.7",
+    "framer-motion": "^6",
     "global": "^4.4.0",
     "prettier": "^2.5.1",
     "rc": "^1.2.8",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "rollup": "^2.72.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "typescript": "^4.5.4",
@@ -70,6 +73,7 @@
     "vite-dts": "^1.0.4",
     "vite-plugin-checker": "^0.4.2",
     "vite-plugin-environment": "^1.1.1",
-    "vite-plugin-svgr": "^2.1.0"
+    "vite-plugin-svgr": "^2.1.0",
+    "web3": "^1.7.3"
   }
 }
