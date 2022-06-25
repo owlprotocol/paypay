@@ -38,7 +38,6 @@ module.exports = {
         const overrideConfig = {
             optimizeDeps: {
                 include: [
-                    //'@owlprotocol/vite-demo-components'
                 ],
                 exclude: [],
                 esbuildOptions: {
