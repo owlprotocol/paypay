@@ -17,8 +17,7 @@
         "compile": "npx hardhat clean && npx hardhat compile",
         "test:parallel": "npx hardhat test --parallel",
         "build": "npm run compile",
-        "generate-types": "npm-run-all -p generate-types:truffle generate-types:web3 generate-types:ethers",
-        "generate-types:truffle": "typechain --target=truffle-v5 --out-dir=types/truffle 'artifacts/contracts/**/+([a-zA-Z0-9_]).json'",
+        "generate-types": "npm-run-all -p generate-types:web3 generate-types:ethers",
         "generate-types:web3": "typechain --target web3-v1 --out-dir=types/web3 'artifacts/contracts/**/+([a-zA-Z0-9_]).json'",
         "generate-types:ethers": "typechain --target=ethers-v5 --out-dir=types/ethers 'artifacts/contracts/**/+([a-zA-Z0-9_]).json'",
         "postinstall": "npm run generate-types"
