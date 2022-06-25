@@ -22,6 +22,7 @@ importers:
       '@emotion/styled': ^11
       '@esbuild-plugins/node-globals-polyfill': ^0.1.1
       '@esbuild-plugins/node-modules-polyfill': ^0.1.4
+      '@fontsource/manrope': ^4.5.10
       '@mdx-js/react': ^2.0.0
       '@rollup/plugin-alias': ^3.1.9
       '@rollup/plugin-commonjs': ^22.0.0
@@ -50,6 +51,7 @@ importers:
       '@storybook/theming': 6.4.19
       '@types/jest': ^27.5.0
       '@types/node': ^17.0.21
+      '@types/numeral': ^2.0.2
       '@types/react': ^17.0.33
       '@types/react-dom': ^17.0.10
       '@types/react-router-dom': ^5.3.3
@@ -67,6 +69,8 @@ importers:
       eslint-plugin-react-hooks: ^4.3.0
       eslint-plugin-storybook: ^0.5.7
       framer-motion: ^6
+      moment: ^2.29.3
+      numeral: ^2.0.6
       prettier: ^2.5.1
       rc: ^1.2.8
       react: ^17.0.2
@@ -87,8 +91,12 @@ importers:
       '@chakra-ui/react': 1.8.8_azjafcdv36d3kr2pinahtgzcny
       '@emotion/react': 11.9.3_agi5j56rhwhfr3kfyspeqe6asa
       '@emotion/styled': 11.9.3_rfuz4hsc3b3cgvjjur2qalnfri
+      '@fontsource/manrope': 4.5.10
+      '@types/numeral': 2.0.2
       '@types/styled-components': 5.1.25
       framer-motion: 6.3.15_sfoxds7t5ydpegc3knd667wn6m
+      moment: 2.29.3
+      numeral: 2.0.6
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-router-dom: 5.2.0_react@17.0.2
@@ -2997,6 +3005,10 @@ packages:
       '@ethersproject/strings': 5.6.0
     dev: false
 
+  /@fontsource/manrope/4.5.10:
+    resolution: {integrity: sha512-1R4A3uXpX2XbNc1LEZdidJWPaQPTH2LiIaB2n4+4D6IrIK/vkIlYx/YtvMLZK36OVWbWY8CYfM+ufrwUAVpEGQ==}
+    dev: false
+
   /@gar/promisify/1.1.3:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
     dev: true
@@ -5309,6 +5321,10 @@ packages:
   /@types/npmlog/4.1.4:
     resolution: {integrity: sha512-WKG4gTr8przEZBiJ5r3s8ZIAoMXNbOgQ+j/d5O4X3x6kZJRLNvyUJuUK/KoG3+8BaOHPhp2m7WC6JKKeovDSzQ==}
     dev: true
+
+  /@types/numeral/2.0.2:
+    resolution: {integrity: sha512-A8F30k2gYJ/6e07spSCPpkuZu79LCnkPTvqmIWQzNGcrzwFKpVOydG41lNt5wZXjSI149qjyzC2L1+F2PD/NUA==}
+    dev: false
 
   /@types/overlayscrollbars/1.12.1:
     resolution: {integrity: sha512-V25YHbSoKQN35UasHf0EKD9U2vcmexRSp78qa8UglxFH8H3D+adEa9zGZwrqpH4TdvqeMrgMqVqsLB4woAryrQ==}
@@ -11381,6 +11397,10 @@ packages:
     resolution: {integrity: sha512-qYvlv/exQ4+svI3UOvPUpLDF0OMX5euvUH0Ny4N5QyRyhNdgAgUrVH3iUINSzEPLvx0kbo/Bp28GJKIqvE7URw==}
     dev: false
 
+  /moment/2.29.3:
+    resolution: {integrity: sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==}
+    dev: false
+
   /move-concurrently/1.0.1:
     resolution: {integrity: sha512-hdrFxZOycD/g6A6SoI2bB5NA/5NEqD0569+S47WZhPvm46sD50ZHdYaFmnua5lndde9rCHGjmfK7Z8BuCt/PcQ==}
     dependencies:
@@ -11657,6 +11677,10 @@ packages:
     dependencies:
       bn.js: 4.11.6
       strip-hex-prefix: 1.0.0
+    dev: false
+
+  /numeral/2.0.6:
+    resolution: {integrity: sha512-qaKRmtYPZ5qdw4jWJD6bxEf1FJEqllJrwxCLIm0sQU/A7v2/czigzOb+C2uSiFsa9lBUzeH7M1oK+Q+OLxL3kA==}
     dev: false
 
   /oauth-sign/0.9.0:
