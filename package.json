@@ -12,9 +12,8 @@
   "license": "MIT",
   "author": "Leo Vigna",
   "scripts": {
-    "build": "npm-run-all build:demo-components build:demo-app",
-    "build:demo-app": "cd packages/demo-app && npm run build",
-    "build:demo-components": "cd packages/demo-components && npm run build",
+    "build": "npm-run-all build:app",
+    "build:app": "cd packages/app && npm run build",
     "clean": "npm-run-all -p clean:lib clean:node_modules",
     "clean:lib": "rimraf packages/*/lib",
     "clean:node_modules": "rimraf packages/*/node_modules",
