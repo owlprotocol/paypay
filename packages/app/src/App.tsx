@@ -1,25 +1,24 @@
 // import logo from './logo.svg';
-import { Container, Row } from 'reactstrap';
+import { Container } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { HeaderNav } from './components';
+import { LoanList } from './screens';
 
 const AppWrapper = styled.div`
     padding: 0 24px;
 `;
 
-const Body = styled.div`
+const Body = styled.div`;
 
 `;
 
 function App() {
     return (
         <AppWrapper>
-            <Container>
+            <Container maxW="container.xl">
                 <HeaderNav />
                 <Body>
-                    <Row>
-                        Hello World
-                    </Row>
+                    <LoanList />
                 </Body>
             </Container>
         </AppWrapper>
