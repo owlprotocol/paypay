@@ -18,9 +18,7 @@ function App() {
         <AppWrapper>
             <Container maxW="container.xl">
                 <HeaderNav />
-                <body>
-                    <LoanList />
-                </body>
+                <LoanList />
             </Container>
         </AppWrapper>
     );

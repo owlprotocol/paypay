@@ -22,6 +22,10 @@ const themeOverrides = {
                         backgroundColor: '#888 !important',
                     },
                 },
+                walletConnect: {
+                    color: '#fff',
+                    background: 'linear-gradient(284.81deg, #9B67CB 0%, #4BBCF6 96.53%), #2A51EC;',
+                },
             },
         },
         fonts: {
