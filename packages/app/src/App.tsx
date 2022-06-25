@@ -1,39 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+// import logo from './logo.svg';
+import { Container, Row } from 'reactstrap';
+import styled from 'styled-components';
+import { HeaderNav } from './components';
+
+const AppWrapper = styled.div`
+    padding: 0 24px;
+`;
+
+const Body = styled.div`
+
+`;
 
 function App() {
-    //https://vitejs.dev/guide/env-and-mode.html#env-variables
-    const metaTitle = import.meta.env.VITE_APP_TITLE;
-
     return (
-        <div className='App'>
-            <header className='App-header'>
-                <img src={logo} className='App-logo' alt='logo' />
-                <div>
-                    App Env Vars
-                    <ul>
-                        <li>metaTitle: {metaTitle}</li>
-                    </ul>
-                </div>
-                <p>
-                    Edit <code>App.tsx</code> and save to test HMR updates.
-                </p>
-                <p>
-                    <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-                        Learn React
-                    </a>
-                    {' | '}
-                    <a
-                        className='App-link'
-                        href='https://vitejs.dev/guide/features.html'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                    >
-                        Vite Docs
-                    </a>
-                </p>
-            </header>
-        </div>
+        <AppWrapper>
+            <Container>
+                <HeaderNav />
+                <Body>
+                    <Row>
+                        Hello World
+                    </Row>
+                </Body>
+            </Container>
+        </AppWrapper>
     );
 }
 
