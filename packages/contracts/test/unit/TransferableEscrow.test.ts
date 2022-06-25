@@ -1,9 +1,9 @@
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
-import { TransferableEscrow, OwlNFT } from '../../typechain';
+import { TransferableEscrow, OwlNFT, OwlToken } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
-describe('TranserableEscrow Test Suite', async () => {
+describe('TransferableEscrow Test Suite', async () => {
     // let TransferableEscrowFactory: TransferableEscrow__factory;
 
     let borrowerToken: OwlNFT;
@@ -12,17 +12,24 @@ describe('TranserableEscrow Test Suite', async () => {
 
     let borrower: SignerWithAddress;
     let lender: SignerWithAddress;
+    let paymentToken: OwlToken;
+
+    const now = () => Math.round(Date.now() / 1000);
 
     before(async () => {
         const ERC721Factory = await ethers.getContractFactory('OwlNFT');
+        const ERC20Factory = await ethers.getContractFactory('OwlToken');
 
         // borrowerToken = (await ERC721Factory.deploy('LenderToken', 'LNDR', 'IPFS-HASH')) as OwlNFT;
         // lenderToken = (await ERC721Factory.deploy('BorrowerToken', 'BRWR', 'IPFS-HASH')) as OwlNFT;
         assetToken = (await ERC721Factory.deploy('AssetToken', 'ASST', 'IPFS-HASH')) as OwlNFT;
+        paymentToken = (await ERC20Factory.deploy()) as OwlToken;
 
         // await Promise.all([borrowerToken.deployed(), lenderToken.deployed(), assetToken.deployed()]);
 
-        [borrower, lender] = await ethers.getSigners();
+        [lender, borrower] = await ethers.getSigners();
+
+        await paymentToken.mint(lender.address, '100000000000000000000');
     });
 
     it('Example Contract', async () => {
@@ -37,15 +44,29 @@ describe('TranserableEscrow Test Suite', async () => {
         await assetToken.safeMint(lender.address, nftAssetId);
 
         // Setup Transfer Escrow
+        //             paymentToken.address,
+        // assetToken.address,
+        // borrowerToken
+        //
+        const OwlhouseFactoryFactory = await ethers.getContractFactory('OwlhouseFactory');
+        const OwlhouseFactory = await OwlhouseFactoryFactory.deploy();
 
-        const TransferableEscrowFactory = await ethers.getContractFactory('TransferableEscrow');
-        const TransferableEscrowContract = await TransferableEscrowFactory.deploy();
-        await TransferableEscrowContract.deployed();
+        // Loan start: t-3 seconds
+        const start = now() + 3;
+        const end = start + 10;
+        const loanAmount = 100;
 
-        console.log('Deployed!');
-        console.log(`Tokens: ${JSON.stringify(borrowerTokenId)} ${JSON.stringify(lenderTokenId)}`);
+        const escrow = await OwlhouseFactory.deployEscrow(
+            lender.address,
+            borrower.address,
+            assetToken.address,
+            paymentToken.address,
+            nftAssetId,
+            start,
+            end,
+            loanAmount,
+        );
 
-        // // const sum = await TransferableEscrowContract.sum(1, 2);
-        // expect(sum).to.equal(3);
+        console.log(`Escrow: ${JSON.stringify(escrow)}`);
     });
 });
