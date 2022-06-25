@@ -1,0 +1,7 @@
+{
+    "entryPoints": ["scripts/deploy.ts", "test/unit/Example.test.ts"],
+    "out": "docs/typescript",
+    "includeVersion": true,
+    "plugin": "typedoc-plugin-markdown",
+    "readme": "none"
+}

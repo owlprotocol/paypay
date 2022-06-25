@@ -7,7 +7,7 @@ import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol';
 
-contract TransferableEscrow is ERC721Receiver {
+contract TransferableEscrow is ERC721Holder {
     // Assets
     address _paymentToken;
     address _assetNFT;
@@ -24,6 +24,37 @@ contract TransferableEscrow is ERC721Receiver {
     // Payments
     uint256 _weiPaid;
     uint256 _weiPerSecond;
+
+    /***********
+     Constructor
+     **********/
+
+    constructor(
+        address paymentToken,
+        address assetNFT,
+        address borrowerNFT,
+        address lenderNFT,
+        uint256 assetTokenId,
+        uint256 borrowerTokenId,
+        uint256 lenderTokenId,
+        uint256 loanStart,
+        uint256 loanEnd,
+        uint256 weiAssetWorth
+    ) {
+        _paymentToken = paymentToken;
+        _assetNFT = assetNFT;
+        _borrowerNFT = borrowerNFT;
+        _lenderNFT = lenderNFT;
+        _assetTokenId = assetTokenId;
+        _borrowerTokenId = borrowerTokenId;
+        _lenderTokenId = lenderTokenId;
+        _loanStart = loanStart;
+        _loanEnd = loanEnd;
+
+        // Calculate weiPerSecond
+        _weiPerSecond = weiAssetWorth / (loanEnd - loanStart);
+        require(_weiPerSecond > 0, 'weiAssetWorth !> timespan');
+    }
 
     /**********************
      Calculate Amount Owed
@@ -68,7 +99,7 @@ contract TransferableEscrow is ERC721Receiver {
     }
 
     function getBorrower() public view returns (address) {
-        return IERC721(_borrowerNFT).ownerOf(_borrower);
+        return IERC721(_borrowerNFT).ownerOf(_borrowerTokenId);
     }
 
     /*****************
