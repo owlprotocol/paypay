@@ -164,8 +164,18 @@ describe('TransferableEscrow V2 Test Suite', async () => {
 
         // Make last payment
         await TransferableEscrowContract.connect(borrower).makePayment(200);
-        console.log('Status after 2nd payment (80 Hoots)');
+        console.log('Status after 2nd payment (200 Hoots)');
         await logPaymentStatus(TransferableEscrowContract);
+
+        // Check ownership of nft (auto claimed)
+        const nftOwner = await assetToken.ownerOf(nftAssetId);
+        console.log(`NFT Owner: ${await assetToken.ownerOf(nftAssetId)}`);
+        expect(nftOwner).to.equal(borrower.address);
+        console.log({
+            lender: lender.address,
+            borrower: borrower.address,
+            nftOwner: nftOwner,
+        });
 
         // Bump timpe
         await nextBlockTime(200);

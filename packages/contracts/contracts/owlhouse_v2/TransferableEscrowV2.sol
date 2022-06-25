@@ -7,6 +7,8 @@ import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol';
 
+import 'hardhat/console.sol';
+
 contract TransferableEscrowV2 is ERC721Holder {
     // Assets
     address _paymentToken;
@@ -123,7 +125,7 @@ contract TransferableEscrowV2 is ERC721Holder {
     }
 
     function paymentsComplete(uint256 time) public view returns (bool) {
-        return _weiPaid >= totalOwedAtTime(time) + totalPrincipal();
+        return _weiPaid >= totalInterestOwedAtTime(time) + totalPrincipal();
     }
 
     function paymentInfo()
@@ -166,13 +168,15 @@ contract TransferableEscrowV2 is ERC721Holder {
 
     function makePayment(uint256 amount) public {
         // Check if a user is paying off completely
-        if (amount > totalPayableNow())
+        uint256 maxPayable = totalPayableNow();
+        if (amount > maxPayable)
             // Bump down to stop from overpaying
-            amount = totalPayableNow();
+            amount = maxPayable;
 
         SafeERC20.safeTransferFrom(IERC20(_paymentToken), getBorrower(), address(this), amount);
         // Increase paid
         _weiPaid += amount;
+
         // Check if claimable
         if (paymentsComplete(block.timestamp) == true) claimAssetNFT();
     }
@@ -189,8 +193,8 @@ contract TransferableEscrowV2 is ERC721Holder {
     function claimAssetNFT() public {
         // transferTo
         address transferTo;
-        if (hasDefaulted() == true) transferTo = getBorrower();
-        else if (paymentsComplete(block.timestamp) == true) transferTo = getLender();
+        if (hasDefaulted() == true) transferTo = getLender();
+        else if (paymentsComplete(block.timestamp) == true) transferTo = getBorrower();
         else revert('NFT not claimable!');
 
         // Transfer out
