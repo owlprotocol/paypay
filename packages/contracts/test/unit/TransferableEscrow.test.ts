@@ -4,7 +4,6 @@ import { TransferableEscrow, OwlNFT, OwlToken, OwlhouseFactory } from '../../typ
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 describe('TransferableEscrow Test Suite', async () => {
-
     // let TransferableEscrowFactory: TransferableEscrow__factory;
 
     let borrowerToken: OwlNFT;
@@ -29,6 +28,7 @@ describe('TransferableEscrow Test Suite', async () => {
     };
 
     const logPaymentStatus = async (c: TransferableEscrow) => {
+        const { loanStart, loanEnd, weiPaid, weiPerSecond } = await c.paymentStatus();
         console.log({
             currentTimestamp: await blockTime(),
             currentOwed: (await c.totalOwedNow()).toString(),
@@ -37,6 +37,10 @@ describe('TransferableEscrow Test Suite', async () => {
             paymentsComplete: await c.paymentsComplete(),
             lender: await c.getLender(),
             borrower: await c.getBorrower(),
+            loanStart: loanStart.toString(),
+            loanEnd: loanEnd.toString(),
+            weiPaid: weiPaid.toString(),
+            weiPerSecond: weiPerSecond.toString(),
         });
     };
 
@@ -144,6 +148,18 @@ describe('TransferableEscrow Test Suite', async () => {
 
         // Make payment
         await TransferableEscrowContract.connect(borrower).makePayment(20);
+        await logPaymentStatus(TransferableEscrowContract);
+
+        // Bump time
+        await nextBlockTime(10);
+        await logPaymentStatus(TransferableEscrowContract);
+
+        // Make last payment
+        await TransferableEscrowContract.connect(borrower).makePayment(80);
+        await logPaymentStatus(TransferableEscrowContract);
+
+        // Bump timpe
+        await nextBlockTime(200);
         await logPaymentStatus(TransferableEscrowContract);
 
         console.log(`Finished @${await blockTime()}`);

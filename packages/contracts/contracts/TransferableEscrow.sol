@@ -90,6 +90,19 @@ contract TransferableEscrow is ERC721Holder {
         return _weiPaid >= totalOwedAtEnd();
     }
 
+    function paymentStatus()
+        public
+        view
+        returns (
+            uint256 loanStart,
+            uint256 loanEnd,
+            uint256 weiPaid,
+            uint256 weiPerSecond
+        )
+    {
+        return (_loanStart, _loanEnd, _weiPaid, _weiPerSecond);
+    }
+
     /*********************
      Lender/Buyer Getters
      ********************/
