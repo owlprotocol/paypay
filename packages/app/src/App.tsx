@@ -9,12 +9,12 @@ function App() {
         <div className='App'>
             <header className='App-header'>
                 <img src={logo} className='App-logo' alt='logo' />
-                <p>
+                <div>
                     App Env Vars
                     <ul>
                         <li>metaTitle: {metaTitle}</li>
                     </ul>
-                </p>
+                </div>
                 <p>
                     Edit <code>App.tsx</code> and save to test HMR updates.
                 </p>
