@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
 import { LoanCard } from '../../components';
 import { Flex } from '@chakra-ui/react';
 
@@ -14,8 +13,8 @@ const tempLoanItems1 = {
     assetValue: 50000,
     equityOwned: 300000,
     interestRate: 0.04,
-    paymentRate: 0.03,
-    prepaidFunds: 10000,
+    paymentRate: 0.08,
+    prepaidFunds: 120000,
 };
 
 const tempLoanItems2 = {
@@ -25,8 +24,8 @@ const tempLoanItems2 = {
     assetValue: 150000,
     equityOwned: 800000,
     interestRate: 0.04,
-    paymentRate: 0.03,
-    prepaidFunds: 10000,
+    paymentRate: 0.2,
+    prepaidFunds: 100000,
 };
 
 const tempLoanItems3 = {
@@ -37,7 +36,7 @@ const tempLoanItems3 = {
     equityOwned: 20000,
     interestRate: 0.04,
     paymentRate: 0.03,
-    prepaidFunds: 10000,
+    prepaidFunds: 100,
 };
 
 const LoanList = () => {

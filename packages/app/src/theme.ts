@@ -1,15 +1,41 @@
 // theme.ts
 
-// 1. import `extendTheme` function
-import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react';
 
-// 2. Add your color mode config
-const config: ThemeConfig = {
-    initialColorMode: 'light',
-    useSystemColorMode: false,
+const themeOverrides = {
+    components: {
+        Button: {
+            baseStyle: {
+                fontWeight: 'bold',
+                color: '#fff',
+                borderRadius: '12px',
+                backgroundColor: '#6E87EC !important',
+                _hover: {
+                    backgroundColor: '#3C5FEC !important',
+                },
+            },
+            variants: {
+                secondary: {
+                    color: '#fff',
+                    backgroundColor: '#4F4F50 !important',
+                    _hover: {
+                        backgroundColor: '#888 !important',
+                    },
+                },
+            },
+        },
+        fonts: {
+            heading: '"Manrope", sans-serif',
+            body: '"Manrope", sans-serif',
+        },
+    },
+    fonts: {
+        heading: '"Manrope", sans-serif',
+        body: '"Manrope", sans-serif',
+    },
 };
 
-// 3. extend the theme
-const theme: any = extendTheme({ config });
+// @ts-ignore
+const theme: any = extendTheme(themeOverrides);
 
 export default theme;
