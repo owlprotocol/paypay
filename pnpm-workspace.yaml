@@ -1,5 +1,5 @@
 packages:
-  - "packages/demo-components"
-  - "packages/demo-app"
+  - "packages/app"
+  - "packages/contracts"
 
 shamefully-hoist: false
