@@ -1,0 +1,5 @@
+packages:
+  - "packages/demo-components"
+  - "packages/demo-app"
+
+shamefully-hoist: false
