@@ -4,12 +4,13 @@ import styled from 'styled-components';
 import { HeaderNav } from './components';
 import { LoanList } from './screens';
 
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/500.css';
+import '@fontsource/manrope/600.css';
+import '@fontsource/manrope/800.css';
+
 const AppWrapper = styled.div`
     padding: 0 24px;
-`;
-
-const Body = styled.div`;
-
 `;
 
 function App() {
@@ -17,9 +18,9 @@ function App() {
         <AppWrapper>
             <Container maxW="container.xl">
                 <HeaderNav />
-                <Body>
+                <body>
                     <LoanList />
-                </Body>
+                </body>
             </Container>
         </AppWrapper>
     );
