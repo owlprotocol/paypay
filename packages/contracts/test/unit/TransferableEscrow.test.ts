@@ -4,6 +4,7 @@ import { TransferableEscrow, OwlNFT, OwlToken, OwlhouseFactory } from '../../typ
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 describe('TransferableEscrow Test Suite', async () => {
+
     // let TransferableEscrowFactory: TransferableEscrow__factory;
 
     let borrowerToken: OwlNFT;
