@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {SimpleGrid, Box, Image, AspectRatio, Button} from '@chakra-ui/react' //Badge
+import { SimpleGrid, Box, Image, AspectRatio, Button } from '@chakra-ui/react' //Badge
 import moment from 'moment';
 import numeral from 'numeral';
 
@@ -11,9 +11,9 @@ const LoanAttrBox = styled(Box)`
 
     font-weight: bold;
     font-size: 18px;
-`
+`;
 
-const LoanCard = (loanItem: any) => {
+const LoanCard = (loanItem: any, setActiveLoanItem: any) => {
     return (
         <Box
             key={loanItem.name}
@@ -62,9 +62,9 @@ const LoanCard = (loanItem: any) => {
                     </LoanAttrBox>
                     <LoanAttrBox>
                         <h5>Time to Default:</h5>
-                        <span style={{fontSize: 14}}>{calcTimeToDefault(loanItem)}</span>
+                        <span style={{ fontSize: 14 }}>{calcTimeToDefault(loanItem)}</span>
                     </LoanAttrBox>
-                    <Button>
+                    <Button onClick={() => setActiveLoanItem(loanItem)}>
                         Add Funds
                     </Button>
                     <Button variant="secondary">

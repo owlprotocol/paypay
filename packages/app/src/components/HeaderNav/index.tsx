@@ -1,8 +1,8 @@
 // import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
 import styled from 'styled-components';
-import { ReactComponent as WalletIcon } from '../../assets/wallet.svg';
-import { Button, Flex, Box, Spacer } from '@chakra-ui/react';
+import walletIcon from '../../assets/metamask-dot.png';
+import { Button, Flex, Box, Spacer, Image } from '@chakra-ui/react';
 
 const Header = styled(Flex)`
     padding: 12px 0;
@@ -23,8 +23,8 @@ const HeaderNav = () => (
         <Box>
             <Button mr={3}>ETH</Button>
 
-            <Button>
-                <WalletIcon width="28px" /> &nbsp;Connect
+            <Button variant="walletConnect" ml={2}>
+                <Image src={walletIcon} w="28px" mr={3} /> Connect
             </Button>
         </Box>
     </Header>
