@@ -17,6 +17,7 @@ contract OwlhouseFactory {
     event TransferEscrow(
         address lenderAddress,
         address paymentToken,
+        address escrowAddress,
         uint256 loanStart,
         uint256 loanEnd,
         uint256 weiNetWorth
@@ -65,7 +66,7 @@ contract OwlhouseFactory {
         // Transfer NFT
         IERC721(assetNFT).safeTransferFrom(lenderAddress, escrow, assetTokenId);
 
-        emit TransferEscrow(lenderAddress, paymentToken, loanStart, loanEnd, weiAssetWorth);
+        emit TransferEscrow(lenderAddress, paymentToken, escrow, loanStart, loanEnd, weiAssetWorth);
 
         // Increment Token Counter
         _mintCounter.increment();
