@@ -66,6 +66,12 @@ const config: HardhatUserConfig = {
             //@ts-ignore will not be undefined
             accounts: [process.env.PRIV_KEY, process.env.PROXY_PRIV_KEY],
         },
+        polygonMumbai: {
+            from: process.env.PRIV_KEY,
+            url: process.env.POLYGON_URL || 'https://matic-mumbai.chainstacklabs.com',
+            //@ts-ignore will not be undefined
+            accounts: [process.env.PRIV_KEY, process.env.PROXY_PRIV_KEY],
+        },
         binance: {
             from: process.env.PRIV_KEY,
             url: process.env.BINANCE_URL || 'https://rpc-bsc.bnb48.club',
@@ -111,6 +117,12 @@ const config: HardhatUserConfig = {
         boba: {
             from: process.env.PRIV_KEY,
             url: process.env.BOBA_URL || 'https://lightning-replica.boba.network',
+            //@ts-ignore will not be undefined
+            accounts: [process.env.PRIV_KEY, process.env.PROXY_PRIV_KEY],
+        },
+        skale: {
+            from: process.env.PRIV_KEY,
+            url: process.env.SKALE_URL || 'https://hackathon.skalenodes.com/v1/downright-royal-saiph',
             //@ts-ignore will not be undefined
             accounts: [process.env.PRIV_KEY, process.env.PROXY_PRIV_KEY],
         },
