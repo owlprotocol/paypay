@@ -1,10 +1,11 @@
 import React, { useState, useEffect} from 'react';
+import { Col } from 'reactstrap';
 import styled from 'styled-components';
 import { Grid, GridItem, Box, Image, AspectRatio, Button, Badge } from '@chakra-ui/react'; //Badge
 import { useContract, useProvider } from 'wagmi';
 import escrowContractJSON from '../../contractABIs/TransferableEscrowV2.json';
 import moment from 'moment';
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber, FixedNumber, ethers } from 'ethers';
 import numeral from 'numeral';
 
 const LoanAttrBox = styled(GridItem)`
@@ -35,6 +36,7 @@ type FinalData = {
     interestRateNow: number;
     prepaidFunds: number;
     weiPerSecond: number;
+    paymentRate: any;
     isDefaulted: boolean;
 };
 
@@ -64,6 +66,7 @@ const LoanCard = ({ loanItem, setActiveLoanItem }: any) => {
         interestRateNow: 0,
         prepaidFunds: 0,
         weiPerSecond: 0,
+        paymentRate: 0,
         isDefaulted: false,
     };
 
@@ -85,21 +88,32 @@ const LoanCard = ({ loanItem, setActiveLoanItem }: any) => {
                 };
 
                 finalLoanItem.totalPrincipal = parseFloat(ethers.utils.formatEther(await escrowContract.totalPrincipal()));
-                finalLoanItem.totalOwedNow = parseFloat(ethers.utils.formatEther(await escrowContract.totalPrincipal()));
+                finalLoanItem.totalOwedNow = parseFloat(ethers.utils.formatEther(await escrowContract.totalOwedNow()));
                 finalLoanItem.totalOwedAtEnd = parseFloat(ethers.utils.formatEther(await escrowContract.totalOwedAtEnd()));
                 finalLoanItem.weiPerSecond = parseFloat(ethers.utils.formatEther((paymentInfo.weiPerSecondPrinciple as BigNumber).add(
-                    paymentInfo.weiPerSecondInterest as BigNumber,
+                            paymentInfo.weiPerSecondInterest as BigNumber,
                 )));
 
                 finalLoanItem.isDefaulted = await escrowContract.hasDefaulted();
 
                 finalLoanItem.interestRateNow = (finalLoanItem.totalOwedAtEnd / finalLoanItem.totalPrincipal) - 1;
 
-                finalLoanItem.prepaidFunds = BigNumber.from(finalLoanItem.paymentInfo.weiPaid).eq(0) ?
-                    0 : parseFloat(ethers.utils.formatEther(
-                        BigNumber.from(finalLoanItem.paymentInfo.weiPaid)
-                            .sub(finalLoanItem.totalOwedNow)
-                    ));
+                try {
+                    finalLoanItem.prepaidFunds = BigNumber.from(finalLoanItem.paymentInfo.weiPaid).eq(0) ?
+                        0 : parseFloat(ethers.utils.formatEther(
+                                  BigNumber.from(finalLoanItem.paymentInfo.weiPaid).sub(finalLoanItem.totalOwedNow),
+                        ));
+                } catch (err: any) {
+                    if (err.code === 'NUMERIC_FAULT') {
+                        finalLoanItem.prepaidFunds = 0;
+                    }
+                }
+
+                finalLoanItem.paymentRate = numeral(finalLoanItem.weiPerSecond).format('0,0.00000000000');
+
+                if (isNaN(finalLoanItem.paymentRate)) {
+                    finalLoanItem.paymentRate = <span style={{ fontWeight: 300 }}>{finalLoanItem.weiPerSecond}</span>;
+                }
 
                 setFinalData(finalLoanItem);
 
@@ -111,57 +125,63 @@ const LoanCard = ({ loanItem, setActiveLoanItem }: any) => {
 
     return (
         finalData == null ? <div>Loading</div> :
-        <Box key={loanItem.name} mx={4} w="326px" boxShadow="lg" borderWidth="1px" borderRadius="lg" overflow="hidden">
-            <AspectRatio maxH="200px" ratio={4 / 3}>
-                <Image src={loanItem.imageUrl} alt={loanItem.imageAlt} />
-            </AspectRatio>
+        <Col className="mt-5">
+            <Box key={loanItem.name} mx={4} w="326px" boxShadow="lg" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                <AspectRatio maxH="200px" ratio={4 / 3}>
+                    <Image src={loanItem.imageUrl} alt={loanItem.imageAlt} />
+                </AspectRatio>
 
-            <Box p="6">
-                <Box color="#404040" fontWeight="bold" letterSpacing="wide" fontSize="18" mb={4}>
-                    {loanItem.name}
-                    {finalData.isDefaulted ? <Badge colorScheme="red" ml={3}>DEFAULTED</Badge> : ''}
+                <Box p="6">
+                    <Box color="#404040" fontWeight="bold" letterSpacing="wide" fontSize="18" mb={4}>
+                        {loanItem.name}
+                        {finalData.isDefaulted ? <Badge colorScheme="red" ml={3}>DEFAULTED</Badge> : ''}
+                    </Box>
+
+                    <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                        <LoanAttrBox colSpan={2}>
+                            <h5>Address:</h5>
+                            <span style={{ fontWeight: 200 }}>{loanItem.address}</span>
+                        </LoanAttrBox>
+                        <LoanAttrBox>
+                            <h5>Equity Owned:</h5>
+                            <span>{numeral(finalData.paymentInfo.ethPaid).format('0,0.000')} ETH</span>
+                        </LoanAttrBox>
+                        <LoanAttrBox>
+                            <h5>Asset Value:</h5>
+                            <span>{numeral(finalData.totalPrincipal).format('0,0.000')} ETH</span>
+                        </LoanAttrBox>
+                        <LoanAttrBox>
+                            <h5>Interest rate:</h5>
+                            <span>{numeral(finalData.interestRateNow).format('0.000%')}</span>
+                        </LoanAttrBox>
+                        <LoanAttrBox colSpan={2}>
+                            <h5>Payment Rate:</h5>
+                            <span>{finalData.paymentRate} Wei / Second</span>
+                        </LoanAttrBox>
+                        <LoanAttrBox>
+                            <h5>Prepaid Funds:</h5>
+                            <span>{numeral(finalData.prepaidFunds).format('0,0.0000')} ETH</span>
+                        </LoanAttrBox>
+                        <LoanAttrBox>
+                            <h5>Time to Default:</h5>
+                            <span>
+                                {finalData.isDefaulted ? <Badge colorScheme="red">in default</Badge> : calcTimeToDefault(finalData)}
+                            </span>
+                        </LoanAttrBox>
+                        <LoanAttrBox>
+                            <h5>Start Date:</h5>
+                            <span>{finalData.paymentInfo.loanStartDate}</span>
+                        </LoanAttrBox>
+                        <LoanAttrBox>
+                            <h5>Maturity Date:</h5>
+                            <span>{finalData.paymentInfo.loanEndDate}</span>
+                        </LoanAttrBox>
+                        <Button onClick={() => setActiveLoanItem(loanItem)}>Add Funds</Button>
+                        <Button variant="secondary">List for Sale</Button>
+                    </Grid>
                 </Box>
-
-                <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-                    <LoanAttrBox>
-                        <h5>Equity Owned:</h5>
-                        <span>{numeral(finalData.paymentInfo.ethPaid).format('0,0.000')} ETH</span>
-                    </LoanAttrBox>
-                    <LoanAttrBox>
-                        <h5>Asset Value:</h5>
-                        <span>{numeral(finalData.totalPrincipal).format('0,0.000')} ETH</span>
-                    </LoanAttrBox>
-                    <LoanAttrBox>
-                        <h5>Interest rate:</h5>
-                        <span>{numeral(finalData.interestRateNow).format('0.000%')}</span>
-                    </LoanAttrBox>
-                    <LoanAttrBox colSpan={2}>
-                        <h5>Payment Rate:</h5>
-                        <span>{numeral(finalData.weiPerSecond).format('0,0.00000000000')} Wei / Second</span>
-                    </LoanAttrBox>
-                    <LoanAttrBox>
-                        <h5>Prepaid Funds:</h5>
-                        <span>{numeral(finalData.prepaidFunds).format('$0,0')}</span>
-                    </LoanAttrBox>
-                    <LoanAttrBox>
-                        <h5>Time to Default:</h5>
-                        <span>
-                            {finalData.isDefaulted ? <Badge colorScheme="red">in default</Badge> : calcTimeToDefault(finalData)}
-                        </span>
-                    </LoanAttrBox>
-                    <LoanAttrBox>
-                        <h5>Start Date:</h5>
-                        <span>{finalData.paymentInfo.loanStartDate}</span>
-                    </LoanAttrBox>
-                    <LoanAttrBox>
-                        <h5>Maturity Date:</h5>
-                        <span>{finalData.paymentInfo.loanEndDate}</span>
-                    </LoanAttrBox>
-                    <Button onClick={() => setActiveLoanItem(loanItem)}>Add Funds</Button>
-                    <Button variant="secondary">List for Sale</Button>
-                </Grid>
             </Box>
-        </Box>
+        </Col>
     );
 };
 
