@@ -3,7 +3,7 @@ pragma solidity ^0.8.4;
 
 import '../assets/OwlNFT.sol';
 import '../assets/IOwlNFT.sol';
-import './TransferableEscrowV3.sol';
+import './TransferableEscrowV4.sol';
 
 import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
@@ -50,7 +50,7 @@ contract OwlhouseFactoryV3 {
 
         // Setup Escrow Contract
         address escrow = address(
-            new TransferableEscrowV3(
+            new TransferableEscrowV4(
                 paymentToken,
                 assetNFT,
                 _borrowerNFT,

@@ -1,4 +1,4 @@
-import { task } from 'hardhat/config';
+/*import { task } from 'hardhat/config';
 
 task('verifyContracts', 'Verify contracts on Etherscan').setAction(async (args, hre) => {
     const { deployments } = hre;
@@ -16,3 +16,4 @@ task('verifyContracts', 'Verify contracts on Etherscan').setAction(async (args, 
         });
     }
 });
+*/

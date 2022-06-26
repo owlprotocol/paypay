@@ -1,3 +1,4 @@
+/*
 import { task } from 'hardhat/config';
 //@ts-ignore eslint-disable-next-line import/no-unresolved import/no-unresolved
 // eslint-disable-next-line
@@ -60,3 +61,4 @@ task('launchEscrow', 'Prints an accounts balance')
             OwlhouseFactory: OwlhouseFactoryContract.address,
         });
     });
+*/

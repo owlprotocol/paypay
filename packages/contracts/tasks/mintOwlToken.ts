@@ -1,3 +1,4 @@
+/*
 import { task } from 'hardhat/config';
 import { OwlNFT, OwlToken } from '../typechain';
 
@@ -25,3 +26,4 @@ task('mintOwlNFT', 'Mints Owl NFT')
         // Get some test tokens
         await OwlNFTContract.safeMint(args.walletAddress, args.tokenId);
     });
+*/

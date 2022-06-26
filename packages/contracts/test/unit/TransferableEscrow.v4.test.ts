@@ -1,4 +1,4 @@
-let { toWad } = require("@decentral.ee/web3-helpers");
+const { toWad } = require('@decentral.ee/web3-helpers');
 
 import { ethers, web3 } from 'hardhat';
 import { expect } from 'chai';
@@ -6,24 +6,24 @@ import { TransferableEscrowV3, OwlNFT, OwlhouseFactoryV3 } from '../../typechain
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import { Framework } from '@superfluid-finance/sdk-core';
-let daiABI = require("../../abis/fDAIABI");
+const daiABI = require('../../abis/fDAIABI');
 
 //SUPERFLUID
 
-let deployFramework = require("@superfluid-finance/ethereum-contracts/scripts/deploy-framework");
-let deployTestToken = require("@superfluid-finance/ethereum-contracts/scripts/deploy-test-token");
-let deploySuperToken = require("@superfluid-finance/ethereum-contracts/scripts/deploy-super-token");
+const deployFramework = require('@superfluid-finance/ethereum-contracts/scripts/deploy-framework');
+const deployTestToken = require('@superfluid-finance/ethereum-contracts/scripts/deploy-test-token');
+const deploySuperToken = require('@superfluid-finance/ethereum-contracts/scripts/deploy-super-token');
 
-let sf: InstanceType<any>;;
+let sf: InstanceType<any>;
 let paymentToken: InstanceType<typeof daiABI>;
 let paymentTokenX: InstanceType<typeof daiABI>;
 let superSigner: InstanceType<typeof sf.createSigner>;
 
-let errorHandler = (err: any) => {
+const errorHandler = (err: any) => {
     if (err) throw err;
-  };
+};
 
-describe('TransferableEscrow V3 Test Suite', async () => {
+describe('TransferableEscrow V4 Test Suite', async () => {
     let borrower: SignerWithAddress;
     let lender: SignerWithAddress;
     let assetToken: InstanceType<typeof daiABI>;
@@ -43,7 +43,7 @@ describe('TransferableEscrow V3 Test Suite', async () => {
 
     const logPaymentStatus = async (c: TransferableEscrowV3) => {
         const { loanStart, loanEnd, weiPaid, weiPerSecondPrinciple, weiPerSecondInterest } = await c.paymentInfo();
-        
+
         console.log({
             currentTimestamp: await blockTime(),
             currentOwed: (await c.totalOwedNow()).toString(),
@@ -68,40 +68,40 @@ describe('TransferableEscrow V3 Test Suite', async () => {
         //deploy the framework
         await deployFramework(errorHandler, {
             web3,
-            from: deployer.address
+            from: deployer.address,
         });
 
         //initialize the superfluid framework...put custom and web3 only bc we are using hardhat locally
         sf = await Framework.create({
-            networkName: "custom",
+            networkName: 'custom',
             provider: web3,
-            dataMode: "WEB3_ONLY",
+            dataMode: 'WEB3_ONLY',
             resolverAddress: process.env.RESOLVER_ADDRESS, //this is how you get the resolver address
-            protocolReleaseVersion: "test",
+            protocolReleaseVersion: 'test',
         });
 
         //deploy a fake erc20 token
-        let fDAIAddress = await deployTestToken(errorHandler, [":", "fDAI"], {
+        const fDAIAddress = await deployTestToken(errorHandler, [':', 'fDAI'], {
             web3,
-            from: deployer.address
+            from: deployer.address,
         });
 
         //deploy a fake erc20 wrapper super token around the fDAI token
-        let fDAIxAddress = await deploySuperToken(errorHandler, [":", "fDAI"], {
+        const fDAIxAddress = await deploySuperToken(errorHandler, [':', 'fDAI'], {
             web3,
-            from: deployer.address
+            from: deployer.address,
         });
 
         superSigner = await sf.createSigner({
             signer: deployer,
-            provider: web3
+            provider: web3,
         });
 
         //use the framework to get the super token
-        paymentTokenX = await sf.loadSuperToken("fDAIx");
+        paymentTokenX = await sf.loadSuperToken('fDAIx');
 
         //get the contract object for the erc20 token
-        let paymentTokenAddress = paymentTokenX.underlyingToken.address;
+        const paymentTokenAddress = paymentTokenX.underlyingToken.address;
         paymentToken = new ethers.Contract(paymentTokenAddress, daiABI, deployer);
 
         // let TransferableEscrowFactory: TransferableEscrow__factory;
@@ -117,19 +117,19 @@ describe('TransferableEscrow V3 Test Suite', async () => {
         [lender, borrower] = await ethers.getSigners();
 
         // Get some test tokens
-        const amount = ethers.utils.parseEther("100000")
+        const amount = ethers.utils.parseEther('100000');
         await paymentToken.mint(borrower.address, amount);
         await paymentToken.connect(borrower).approve(paymentTokenX.address, amount);
 
         const paymentTokenXUpgradeOperation = paymentTokenX.upgrade({
-          amount
+            amount,
         });
-      
+
         await paymentTokenXUpgradeOperation.exec(borrower);
-      
+
         const paymentTokenXBal = await paymentTokenX.balanceOf({
-          account: borrower.address,
-          providerOrSigner: borrower
+            account: borrower.address,
+            providerOrSigner: borrower,
         });
         console.log('paymentTokenX bal for borrower: ', ethers.utils.formatEther(paymentTokenXBal));
 
@@ -148,7 +148,7 @@ describe('TransferableEscrow V3 Test Suite', async () => {
         const loanAmount = 100;
         const interestAmount = 50;
 
-        console.log(paymentTokenX.address)
+        console.log(paymentTokenX.address);
 
         await OwlhouseFactory.deployEscrow(
             lender.address,
@@ -168,8 +168,8 @@ describe('TransferableEscrow V3 Test Suite', async () => {
         const createFlowOperation = await sf.cfaV1.createFlow({
             receiver: escrowAddress,
             superToken: paymentTokenX.address,
-            flowRate: (toWad((loanAmount+interestAmount)/(end-start)).toString()),
-        })
+            flowRate: toWad((loanAmount + interestAmount) / (end - start)).toString(),
+        });
         await createFlowOperation.exec(borrower);
 
         // Grab contract obj
@@ -194,7 +194,7 @@ describe('TransferableEscrow V3 Test Suite', async () => {
 
         // withdraw
         await TransferableEscrowContract.withdrawPayment();
-        console.log('lender balance:', ethers.utils.formatEther(await paymentToken.balanceOf(lender.address)))
+        console.log('lender balance:', ethers.utils.formatEther(await paymentToken.balanceOf(lender.address)));
 
         // claim nft
         await TransferableEscrowContract.connect(borrower).claimAssetNFT();
