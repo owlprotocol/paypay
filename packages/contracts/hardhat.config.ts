@@ -35,7 +35,7 @@ const config: HardhatUserConfig = {
         other: 1,
     },
     networks: {
-        hardhat: {
+        /*hardhat: {
             from: process.env.PRIV_KEY,
             chainId: 1337,
             accounts: [
@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
                 { balance: '1000000000000000000', privateKey: ethers.utils.hexZeroPad(ethers.utils.hexlify(2), 32) },
                 { balance: '1000000000000000000', privateKey: ethers.utils.hexZeroPad(ethers.utils.hexlify(3), 32) },
             ],
-        },
+        },*/
 
         rinkeby: {
             from: process.env.PRIV_KEY,
