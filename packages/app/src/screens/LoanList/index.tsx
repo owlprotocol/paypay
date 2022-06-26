@@ -2,6 +2,9 @@ import React, {useState, useCallback, useEffect} from 'react';
 import {LoanCard, ModalLoanPay} from '../../components';
 import {Flex, useDisclosure} from '@chakra-ui/react';
 
+// import { useAccount, useConnect, useDisconnect } from 'wagmi'
+// import { InjectedConnector } from 'wagmi/connectors/injected'
+
 import nftDummy1 from '../../assets/nft-dummy-1.jpeg';
 import nftDummy2 from '../../assets/nft-dummy-2.png';
 import nftDummy3 from '../../assets/nft-dummy-3.jpeg';
