@@ -49,4 +49,9 @@ export default defineConfig({
     build: {
         rollupOptions: {},
     },
+    server: {
+        hmr: {
+            overlay: false,
+        },
+    },
 });
