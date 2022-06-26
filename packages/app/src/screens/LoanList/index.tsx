@@ -12,7 +12,7 @@ import nftDummy3 from '../../assets/nft-dummy-3.jpeg';
 
 const tempLoanItems1 = {
 
-    address: '0x9f83eaaa2046fcc139aaa0e786475a843056d5a8',
+    address: '0xa58a3c5cb9934a3fd3f78ecce5aa1cb90d2fb75e',
 
     // new
     assetNFT: null,
@@ -86,7 +86,7 @@ const LoanList = () => {
     useEffect(() => {
         // TODO: fetch events to get list of escrows
 
-        setLoanItems([tempLoanItems1, tempLoanItems2, tempLoanItems3]);
+        setLoanItems([tempLoanItems1]);//, tempLoanItems2, tempLoanItems3]);
     }, []);
 
     const closeModal = useCallback(() => {
