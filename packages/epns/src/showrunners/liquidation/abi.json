@@ -1,0 +1,118 @@
+{
+    "abi": 
+  [
+      {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "lenderAddress",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "paymentToken",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "escrowAddress",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "loanStart",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "loanEnd",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "weiNetWorth",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "weiAssetWorthInterest",
+            "type": "uint256"
+          }
+        ],
+        "name": "TransferEscrow",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "lenderAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "borrowerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "assetNFT",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "paymentToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "assetTokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "loanStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "loanEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "weiAssetWorth",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "weiAssetWorthInterest",
+            "type": "uint256"
+          }
+        ],
+        "name": "deployEscrow",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ]
+  }

@@ -1,0 +1,10 @@
+type Escrow @entity {
+  id: ID!
+  lenderAddress: Bytes!
+  paymentToken: Bytes!
+  escrowAddress: Bytes!
+  loanStart: BigInt!
+  loanEnd: BigInt!
+  weiNetWorth: BigInt!
+  weiAssetWorthInterest: BigInt!
+}
