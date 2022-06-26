@@ -2,5 +2,7 @@ packages:
   - "packages/app"
   - "packages/contracts"
   - "packages/graph"
+  #- "packages/chainlink-kit"
+  #- "packages/epns"
 
 shamefully-hoist: false
