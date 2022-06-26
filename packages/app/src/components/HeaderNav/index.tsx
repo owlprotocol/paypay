@@ -27,7 +27,7 @@ const HeaderNav = () => {
             <Flex>
                 <img src={logo} style={{ height: 45 }} alt="logo" />
                 <Box mt={3} ml={2}>
-                    <img src={logoText} style={{ height: 45 }} alt="logo-text" />
+                    <img src={logoText} style={{ height: 25 }} alt="logo-text" />
                 </Box>
             </Flex>
 
