@@ -14,7 +14,7 @@ const LoanAttrBox = styled(GridItem)`
     }
 
     font-weight: bold;
-    font-size: 18px;
+    font-size: 14px;
 `;
 
 const dateFormat = 'MMM D, YYYY';
@@ -101,8 +101,6 @@ const LoanCard = ({ loanItem, setActiveLoanItem }: any) => {
                             .sub(finalLoanItem.totalOwedNow)
                     ));
 
-                console.log(finalLoanItem);
-
                 setFinalData(finalLoanItem);
 
             } catch (err) {
@@ -139,7 +137,7 @@ const LoanCard = ({ loanItem, setActiveLoanItem }: any) => {
                     </LoanAttrBox>
                     <LoanAttrBox colSpan={2}>
                         <h5>Payment Rate:</h5>
-                        <span style={{ fontSize: 14 }}>{numeral(finalData.weiPerSecond).format('0,0.00000000000')} Wei / Second</span>
+                        <span>{numeral(finalData.weiPerSecond).format('0,0.00000000000')} Wei / Second</span>
                     </LoanAttrBox>
                     <LoanAttrBox>
                         <h5>Prepaid Funds:</h5>
@@ -147,17 +145,17 @@ const LoanCard = ({ loanItem, setActiveLoanItem }: any) => {
                     </LoanAttrBox>
                     <LoanAttrBox>
                         <h5>Time to Default:</h5>
-                        <span style={{fontSize: 14}}>
+                        <span>
                             {finalData.isDefaulted ? <Badge colorScheme="red">in default</Badge> : calcTimeToDefault(finalData)}
                         </span>
                     </LoanAttrBox>
                     <LoanAttrBox>
                         <h5>Start Date:</h5>
-                        <span style={{ fontSize: 14 }}>{finalData.paymentInfo.loanStartDate}</span>
+                        <span>{finalData.paymentInfo.loanStartDate}</span>
                     </LoanAttrBox>
                     <LoanAttrBox>
                         <h5>Maturity Date:</h5>
-                        <span style={{ fontSize: 14 }}>{finalData.paymentInfo.loanEndDate}</span>
+                        <span>{finalData.paymentInfo.loanEndDate}</span>
                     </LoanAttrBox>
                     <Button onClick={() => setActiveLoanItem(loanItem)}>Add Funds</Button>
                     <Button variant="secondary">List for Sale</Button>
