@@ -4,10 +4,16 @@ pragma solidity ^0.8.4;
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
+import '@openzeppelin/contracts/utils/math/Math.sol';
+
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol';
 
 import 'hardhat/console.sol';
+
+import { 
+    ISuperToken 
+} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol"; 
 
 contract TransferableEscrowV3 is ERC721Holder {
     // Assets
@@ -24,7 +30,6 @@ contract TransferableEscrowV3 is ERC721Holder {
     uint256 _loanEnd;
 
     // Payments
-    uint256 _weiPaid;
     uint256 _weiPerSecondPrinciple;
     uint256 _weiPerSecondInterest;
 
@@ -75,7 +80,7 @@ contract TransferableEscrowV3 is ERC721Holder {
     }
 
     function totalPayableNow() public view returns (uint256) {
-        return (totalInterestOwedAtTime(block.timestamp) + totalPrincipal()) - _weiPaid;
+        return (totalInterestOwedAtTime(block.timestamp) + totalPrincipal()) - totalPayed();
     }
 
     function totalOwedNow() public view returns (uint256) {
@@ -116,16 +121,24 @@ contract TransferableEscrowV3 is ERC721Holder {
         return loanRuntime * _weiPerSecondPrinciple;
     }
 
+    function totalPayed() public view returns (uint256) {
+        return 
+            Math.min(
+            ISuperToken(_paymentToken).balanceOf(address(this)),
+            totalOwedAtEnd()
+        );
+    }
+
     /************************
      Calculate Payment Status
      ***********************/
 
     function hasDefaulted() public view returns (bool) {
-        return _weiPaid < totalOwedNow();
+        return totalPayed() < totalOwedNow();
     }
 
     function paymentsComplete(uint256 time) public view returns (bool) {
-        return _weiPaid >= totalInterestOwedAtTime(time) + totalPrincipal();
+        return totalPayed() >= totalInterestOwedAtTime(time) + totalPrincipal();
     }
 
     function paymentInfo()
@@ -143,7 +156,7 @@ contract TransferableEscrowV3 is ERC721Holder {
         return (
             _loanStart,
             _loanEnd,
-            _weiPaid,
+            totalPayed(),
             _weiPerSecondPrinciple,
             _weiPerSecondInterest,
             paymentsComplete(block.timestamp)
@@ -166,24 +179,15 @@ contract TransferableEscrowV3 is ERC721Holder {
      Payment Handlers
      ****************/
 
-    function makePayment(uint256 amount) public {
-        // Check if a user is paying off completely
-        uint256 maxPayable = totalPayableNow();
-        if (amount > maxPayable)
-            // Bump down to stop from overpaying
-            amount = maxPayable;
-
-        SafeERC20.safeTransferFrom(IERC20(_paymentToken), getBorrower(), address(this), amount);
-        // Increase paid
-        _weiPaid += amount;
-
-        // Check if claimable
-        if (paymentsComplete(block.timestamp) == true) claimAssetNFT();
-    }
-
     function withdrawPayment() public {
+        // unwrap underlying token from the supertoken
+        ISuperToken st = ISuperToken(_paymentToken);
+        st.downgrade(totalPayed());
+
+        // underlying token
+        IERC20 ut = IERC20(st.getUnderlyingToken());
         // Transfer all balance out
-        SafeERC20.safeTransfer(IERC20(_paymentToken), getLender(), IERC20(_paymentToken).balanceOf(address(this)));
+        SafeERC20.safeTransfer(ut, getLender(), ut.balanceOf(address(this)));
     }
 
     /**********
