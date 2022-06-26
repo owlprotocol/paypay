@@ -1,0 +1,24 @@
+{
+  "name": "graph",
+  "license": "UNLICENSED",
+  "version": "1.0.0",
+  "scripts": {
+    "run-graph-node": "cd graph-node && docker-compose up",
+    "remove-graph-node": "cd graph-node && docker-compose down",
+    "clean-graph-node": "rm -rf graph-node/data/",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "prepare:rinkeby": "mustache config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
+    "create:local": "graph create --node http://localhost:8020/ paypay/paypay",
+    "remove:local": "graph remove --node http://localhost:8020/ paypay/paypay",
+    "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 paypay/paypay",
+    "deploy:rinkeby": "graph deploy --product hosted-service emilianobonassi/paypay-rinkeby",
+    "ship:local": "yarn codegen && yarn deploy:local",
+    "ship:rinkeby": "yarn codegen && yarn deploy:rinkeby"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.29.0",
+    "@graphprotocol/graph-ts": "^0.26.0",
+    "mustache": "^4.2.0"
+  }
+}
