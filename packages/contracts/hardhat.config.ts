@@ -12,7 +12,6 @@ import '@openzeppelin/hardhat-upgrades';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 
-import { ethers } from 'ethers';
 import './tasks/launchEscrow';
 import './tasks/mintOwlToken';
 
