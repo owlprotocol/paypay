@@ -11,69 +11,29 @@ import nftDummy2 from '../../assets/nft-dummy-2.png';
 import nftDummy3 from '../../assets/nft-dummy-3.jpeg';
 
 const tempLoanItems1 = {
-
-    address: '0xa58a3c5cb9934a3fd3f78ecce5aa1cb90d2fb75e',
-
-    // new
-    assetNFT: null,
-    weiPaid: 300000, // equity owned
-    prepaidFunds: 120000, // weiPaid - totalOwedNow() // buffer
-
-    paymentRate: 0.08, //weiPerSecondPrinciple + weiPerSecondInterest
-
-    loanStart: moment.now(),
-    loanEnd: moment.now(),
-
-    // old
     name: 'Bored Ape Dummy',
     imageUrl: nftDummy1,
     imageAlt: 'bored-ape-dummy',
-    assetValue: 50000,
-    equityOwned: 300000,
-    interestRate: 0.04,
-
 };
 
 const tempLoanItems2 = {
-
-    address: '0x7232ff16985a3b5bcd96b490461f7703b5d9d136',
-
     name: 'House Dummy',
     imageUrl: nftDummy2,
     imageAlt: 'house-dummy',
-    assetValue: 150000,
-    equityOwned: 800000,
-    interestRate: 0.04,
-    paymentRate: 0.2,
-    prepaidFunds: 100000,
 };
 
 const tempLoanItems3 = {
-
-    address: '0x7232ff16985a3b5bcd96b490461f7703b5d9d137',
-
     name: 'Metaverse Property Dummy',
     imageUrl: nftDummy3,
-    imageAlt:
-        'metaverse-dummy',
-    assetValue: 500,
-    equityOwned: 20000,
-    interestRate: 0.04,
-    paymentRate: 0.03,
-    prepaidFunds: 100,
+    imageAlt: 'metaverse-dummy',
 };
 
-/*
-const escrowContractAddrs = [
-    '0x9f83eaaa2046fcc139aaa0e786475a843056d5a8',
-    '0x7232ff16985a3b5bcd96b490461f7703b5d9d136'
-];
- */
+const dummyData = [tempLoanItems1, tempLoanItems2, tempLoanItems3];
 
 const LoanList = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const [loanItems, setLoanItems] = useState<any>([]);
+    const [loanItems, setLoanItems] = useState<any>();
 
     const [activeLoanItem, setActiveLoanItem] = useState<any>();
 
@@ -84,9 +44,30 @@ const LoanList = () => {
     }, [activeLoanItem, onOpen]);
 
     useEffect(() => {
-        // TODO: fetch events to get list of escrows
+        (async () => {
+            const res = await fetch('https://api.thegraph.com/subgraphs/name/emilianobonassi/paypay-rinkeby', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: '{\n  escrows(first: 5) {\n    id\n    lenderAddress\n    paymentToken\n    escrowAddress\n  }\n}\n',
+                    variables: null,
+                }),
+            });
 
-        setLoanItems([tempLoanItems1]);//, tempLoanItems2, tempLoanItems3]);
+            const resJSON = await res.json()
+
+            setLoanItems(resJSON.data.escrows.map((escrowData: any) => {
+
+                const randomDummy = dummyData[Math.floor(Math.random() * 3)]
+
+                return {
+                    address: escrowData.id,
+                    ...randomDummy
+                };
+            }))
+        })();
     }, []);
 
     const closeModal = useCallback(() => {
@@ -96,7 +77,10 @@ const LoanList = () => {
 
     return (
         <Flex mt={8}>
-            {loanItems.map((loanItem: any) => <LoanCard key={loanItem.address} loanItem={loanItem} setActiveLoanItem={setActiveLoanItem} />)}
+            {loanItems == null ? <div>Loading</div> : (
+                loanItems.length === 0 ? <div>No Items Found</div> :
+                loanItems.map((loanItem: any) => <LoanCard key={loanItem.address} loanItem={loanItem} setActiveLoanItem={setActiveLoanItem} />
+            ))}
 
             <ModalLoanPay isOpen={isOpen} closeModal={closeModal} loanItem={activeLoanItem} />
         </Flex>
