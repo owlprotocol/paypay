@@ -8,7 +8,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const { deploy } = deployments;
     const { deployer } = await getNamedAccounts();
 
-    await deploy('OwlhouseFactoryV2', {
+    await deploy('OwlhouseFactoryV3', {
         from: deployer,
         args: [],
         log: true,
