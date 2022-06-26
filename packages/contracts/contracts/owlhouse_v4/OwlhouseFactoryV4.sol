@@ -8,7 +8,7 @@ import './TransferableEscrowV4.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
-contract OwlhouseFactoryV3 {
+contract OwlhouseFactoryV4 {
     using Counters for Counters.Counter;
 
     Counters.Counter private _mintCounter;

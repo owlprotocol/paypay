@@ -22,7 +22,6 @@
         "generate-types:ethers": "typechain --target=ethers-v5 --out-dir=types/ethers 'artifacts/contracts/**/+([a-zA-Z0-9_]).json'"
     },
     "dependencies": {
-        "@chainlink/contracts": "^0.4.1",
         "@decentral.ee/web3-helpers": "^0.5.3",
         "@superfluid-finance/sdk-core": "^0.4.2",
         "dotenv": "^10.0.0",
@@ -42,6 +41,7 @@
         "web3-utils": "^1.6.0"
     },
     "devDependencies": {
+        "@chainlink/contracts": "^0.4.1",
         "@ethersproject/abi": "^5.5.0",
         "@ethersproject/contracts": "^5.5.0",
         "@ethersproject/providers": "^5.5.2",

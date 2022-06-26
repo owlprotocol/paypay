@@ -1,7 +1,7 @@
 import { task } from 'hardhat/config';
 //@ts-ignore eslint-disable-next-line import/no-unresolved import/no-unresolved
 // eslint-disable-next-line
-import { OwlhouseFactoryV3, OwlNFT, OwlToken } from '../typechain';
+import { OwlhouseFactoryV4, OwlNFT, OwlToken } from '../typechain';
 
 task('launchEscrow', 'Prints an accounts balance')
     .addParam('tokenId', 'Numeric token id to mint')
@@ -17,8 +17,8 @@ task('launchEscrow', 'Prints an accounts balance')
         };
 
         // Get OwlhouseFactory
-        let { address } = await deployments.get('OwlhouseFactoryV3');
-        const OwlhouseFactoryContract = (await ethers.getContractAt('OwlhouseFactoryV3', address)) as OwlhouseFactoryV3;
+        let { address } = await deployments.get('OwlhouseFactoryV4');
+        const OwlhouseFactoryContract = (await ethers.getContractAt('OwlhouseFactoryV4', address)) as OwlhouseFactoryV4;
 
         ({ address } = await deployments.get('OwlNFT'));
         const OwlNFTContract = (await ethers.getContractAt('OwlNFT', address)) as OwlNFT;
