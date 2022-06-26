@@ -146,7 +146,10 @@ contract TransferableEscrowV4 is ERC721Holder, KeeperCompatibleInterface {
     }
 
     function totalPayed() public view returns (uint256) {
-        return Math.min(ISuperToken(_paymentToken).balanceOf(address(this)) + _weiWithdrawn, totalOwedAtEnd());
+        return Math.min(
+            _weiWithdrawn // already withdrawn
+            + ISuperToken(_paymentToken).balanceOf(address(this)), // availablr to withdraw
+            totalOwedAtEnd());
     }
 
     /************************
@@ -200,18 +203,21 @@ contract TransferableEscrowV4 is ERC721Holder, KeeperCompatibleInterface {
      ****************/
 
     function withdrawPayment() public {
+        uint256 _totalPayed = totalPayed();
+        // amount available to withdraw
+        uint256 _availableToWithdraw = _totalPayed - _weiWithdrawn;
+        require(_availableToWithdraw > 0, 'no amt avail');
+
+        _weiWithdrawn += _availableToWithdraw;
+
         // unwrap underlying token from the supertoken
         ISuperToken st = ISuperToken(_paymentToken);
-        uint256 _totalPayed = totalPayed();
-        require(_totalPayed > _weiWithdrawn);
-        st.downgrade(_totalPayed - _weiWithdrawn);
+        st.downgrade(_availableToWithdraw);
 
         // underlying token
         IERC20 ut = IERC20(st.getUnderlyingToken());
         // Transfer all balance out
         SafeERC20.safeTransfer(ut, getLender(), ut.balanceOf(address(this)));
-
-        _weiWithdrawn += _totalPayed - _weiWithdrawn;
     }
 
     /**********
