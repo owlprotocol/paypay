@@ -19,10 +19,10 @@
         "build": "npm run compile",
         "generate-types": "npm-run-all -p generate-types:web3 generate-types:ethers",
         "generate-types:web3": "typechain --target web3-v1 --out-dir=types/web3 'artifacts/contracts/**/+([a-zA-Z0-9_]).json'",
-        "generate-types:ethers": "typechain --target=ethers-v5 --out-dir=types/ethers 'artifacts/contracts/**/+([a-zA-Z0-9_]).json'",
-        "postinstall": "npm run generate-types"
+        "generate-types:ethers": "typechain --target=ethers-v5 --out-dir=types/ethers 'artifacts/contracts/**/+([a-zA-Z0-9_]).json'"
     },
     "dependencies": {
+        "@chainlink/contracts": "^0.4.1",
         "@decentral.ee/web3-helpers": "^0.5.3",
         "@superfluid-finance/sdk-core": "^0.4.2",
         "dotenv": "^10.0.0",
