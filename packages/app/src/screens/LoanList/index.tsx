@@ -1,8 +1,6 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {LoanCard, ModalLoanPay} from '../../components';
 import {Flex, useDisclosure} from '@chakra-ui/react';
-import { useContract } from 'wagmi'
-import escrowContractABI from '../../contractABIs/OwlhouseFactoryV2.json';
 import moment from 'moment';
 
 // import { useAccount, useConnect, useDisconnect } from 'wagmi'
@@ -52,7 +50,7 @@ const tempLoanItems2 = {
 
 const tempLoanItems3 = {
 
-    address: 'test',
+    address: '0x7232ff16985a3b5bcd96b490461f7703b5d9d137',
 
     name: 'Metaverse Property Dummy',
     imageUrl: nftDummy3,
@@ -79,15 +77,6 @@ const LoanList = () => {
 
     const [activeLoanItem, setActiveLoanItem] = useState<any>();
 
-    /*
-    const escrowContracts = escrowContractAddrs.map((contractAddr) => {
-        return useContract({
-            addressOrName: contractAddr,
-            contractInterface: escrowContractABI.toString(),
-        });
-    });
-     */
-
     useEffect(() => {
         if (activeLoanItem != null) {
             onOpen();
@@ -95,7 +84,6 @@ const LoanList = () => {
     }, [activeLoanItem, onOpen]);
 
     useEffect(() => {
-
         // TODO: fetch events to get list of escrows
 
         setLoanItems([tempLoanItems1, tempLoanItems2, tempLoanItems3]);
@@ -108,9 +96,7 @@ const LoanList = () => {
 
     return (
         <Flex mt={8}>
-            {loanItems.length === 0 ? <div>Loading</div> : (
-                loanItems.map((loanItem: any) => LoanCard(loanItem, setActiveLoanItem))
-            )}
+            {loanItems.map((loanItem: any) => <LoanCard key={loanItem.address} loanItem={loanItem} setActiveLoanItem={setActiveLoanItem} />)}
 
             <ModalLoanPay isOpen={isOpen} closeModal={closeModal} loanItem={activeLoanItem} />
         </Flex>
