@@ -25,7 +25,6 @@
     "react-router-dom": "5.2.0",
     "reactstrap": "^9.1.1",
     "styled-components": "^5.3.3",
-    "wagmi": "^0.4.12",
     "web3": "^1.7.3"
   },
   "devDependencies": {
@@ -86,6 +85,7 @@
     "vite-dts": "^1.0.4",
     "vite-plugin-checker": "^0.4.2",
     "vite-plugin-environment": "^1.1.1",
-    "vite-plugin-svgr": "^2.1.0"
+    "vite-plugin-svgr": "^2.1.0",
+    "wagmi": "^0.4.12"
   }
 }

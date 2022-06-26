@@ -233,12 +233,12 @@ importers:
       web3-eth-contract: ^1.6.1
       web3-utils: ^1.6.1
     dependencies:
-      '@chainlink/contracts': 0.4.1
       '@decentral.ee/web3-helpers': 0.5.3
       '@superfluid-finance/sdk-core': 0.4.2_nx5rldzsxkqp2qf2miljeykxp4
       dotenv: 10.0.0
       graphql: 16.5.0
     devDependencies:
+      '@chainlink/contracts': 0.4.1
       '@ethersproject/abi': 5.6.4
       '@ethersproject/contracts': 5.6.2
       '@ethersproject/providers': 5.6.8
@@ -1782,7 +1782,7 @@ packages:
 
   /@chainlink/contracts/0.4.1:
     resolution: {integrity: sha512-eC8biY6Ks8k9kZKVt5305veCP3z57yyiy6Os5aR6auta6Bp34xWQ/s4qvrifcW4FNgWw1HJPwMPXDGfiehcLjg==}
-    dev: false
+    dev: true
 
   /@chakra-ui/accordion/1.4.11_l7mxpzhrkoqhjnbjwmqltnxo54:
     resolution: {integrity: sha512-d/gvSgGwcZaJXxXqGmecpAgko/tUYb5vR0E0B2/V/z9AVbS8ei//fbiO9+8Ouyl/K46oWHWYj5vt8iTadlZleg==}
