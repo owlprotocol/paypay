@@ -19,6 +19,12 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         args: ['OwlNFT', 'ONFT', 'IPFS-HASH'],
         log: true,
     });
+
+    await deploy('OwlNFTV2', {
+        from: deployer,
+        args: [],
+        log: true,
+    });
 };
 
 export default deploy;

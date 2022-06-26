@@ -90,6 +90,12 @@ const config: HardhatUserConfig = {
             //@ts-ignore will not be undefined
             accounts: [process.env.PRIV_KEY, process.env.PROXY_PRIV_KEY],
         },
+        optimismKovan: {
+            from: process.env.PRIV_KEY,
+            url: process.env.OPTIMISM_URL || 'https://kovan.optimism.io',
+            //@ts-ignore will not be undefined
+            accounts: [process.env.PRIV_KEY, process.env.PROXY_PRIV_KEY],
+        },
         avalanche: {
             from: process.env.PRIV_KEY,
             url: process.env.AVALANCHE_URL || 'https://ava-mainnet.public.blastapi.io/ext/bc/C/rpc',
@@ -117,6 +123,12 @@ const config: HardhatUserConfig = {
         boba: {
             from: process.env.PRIV_KEY,
             url: process.env.BOBA_URL || 'https://lightning-replica.boba.network',
+            //@ts-ignore will not be undefined
+            accounts: [process.env.PRIV_KEY, process.env.PROXY_PRIV_KEY],
+        },
+        bobaRinkeby: {
+            from: process.env.PRIV_KEY,
+            url: process.env.BOBA_URL || 'https://rinkeby.boba.network',
             //@ts-ignore will not be undefined
             accounts: [process.env.PRIV_KEY, process.env.PROXY_PRIV_KEY],
         },

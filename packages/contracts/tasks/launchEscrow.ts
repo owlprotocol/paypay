@@ -36,19 +36,19 @@ task('launchEscrow', 'Prints an accounts balance')
         await OwlNFTContract.safeMint(lender, args.tokenId);
 
         // Start time
-        const start = (await blockTime()) + 3600;
-        const end = start + 86400;
+        const start = await blockTime();
+        const end = start + 46400;
 
         await OwlhouseFactoryContract.deployEscrow(
             lender,
             borrower,
             OwlNFTContract.address,
-            '0xa623b2DD931C5162b7a0B25852f4024Db48bb1A0' || OwlTokenContract.address,
+            '0xa623b2DD931C5162b7a0B25852f4024Db48bb1A0', // || OwlTokenContract.address,
             args.tokenId,
             start,
             end,
-            '100000000000000000',
             '10000000000000000',
+            '1000000000000000',
             {
                 gasLimit: 5_000_000,
             },
