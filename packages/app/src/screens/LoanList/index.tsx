@@ -1,7 +1,9 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {LoanCard, ModalLoanPay} from '../../components';
-import {Flex, useDisclosure} from '@chakra-ui/react';
-import moment from 'moment';
+import {useDisclosure} from '@chakra-ui/react';
+import {Container, Row} from 'reactstrap'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // import { useAccount, useConnect, useDisconnect } from 'wagmi'
 // import { InjectedConnector } from 'wagmi/connectors/injected'
@@ -51,7 +53,7 @@ const LoanList = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    query: '{\n  escrows(first: 5) {\n    id\n    lenderAddress\n    paymentToken\n    escrowAddress\n  }\n}\n',
+                    query: '{\n  escrows(last: 5) {\n    id\n    lenderAddress\n    paymentToken\n    escrowAddress\n  }\n}\n',
                     variables: null,
                 }),
             });
@@ -76,14 +78,17 @@ const LoanList = () => {
     }, [setActiveLoanItem, onClose]);
 
     return (
-        <Flex mt={8}>
-            {loanItems == null ? <div>Loading</div> : (
-                loanItems.length === 0 ? <div>No Items Found</div> :
-                loanItems.map((loanItem: any) => <LoanCard key={loanItem.address} loanItem={loanItem} setActiveLoanItem={setActiveLoanItem} />
-            ))}
+        <Container className="mt-5">
+            <Row>
+                {loanItems == null ? <div>Loading</div> : (
+                    loanItems.length === 0 ? <div>No Items Found</div> :
+                        loanItems.map((loanItem: any) => <LoanCard key={loanItem.address} loanItem={loanItem} setActiveLoanItem={setActiveLoanItem} />
+                        ))}
 
-            <ModalLoanPay isOpen={isOpen} closeModal={closeModal} loanItem={activeLoanItem} />
-        </Flex>
+                <ModalLoanPay isOpen={isOpen} closeModal={closeModal} loanItem={activeLoanItem} />
+            </Row>
+        </Container>
+
     );
 };
 

@@ -19,12 +19,14 @@ const ModalLoanPay = ({ isOpen, closeModal, loanItem}: any) => {
             <ModalOverlay/>
             <ModalContent>
                 <ModalHeader>
-                    Modal
-                    Title
+                    {loanItem != null ? loanItem.name : ''}
                 </ModalHeader>
                 <ModalCloseButton/>
                 <ModalBody>
-                    {loanItem != null ? loanItem.name : ''}
+                    {loanItem != null ? loanItem.address : ''}
+                    <br/>
+                    <br/>
+                    TODO
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={closeModal} mr={3}>
