@@ -13,6 +13,8 @@ import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 
 import { ethers } from 'ethers';
+import './tasks/launchEscrow';
+import './tasks/mintOwlToken';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -148,6 +150,12 @@ const config: HardhatUserConfig = {
     typechain: {
         outDir: 'typechain', //default
         target: 'ethers-v5', //All options: ethers-v5, web3-v1, truffle-v5
+    },
+    etherscan: {
+        apiKey: {
+            mainnet: process.env.MAINNET_API_KEY || '',
+            rinkeby: process.env.RINKEBY_API_KEY || '',
+        },
     },
     // etherscan: {
     //     apiKey: {
